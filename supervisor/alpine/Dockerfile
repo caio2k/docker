@@ -13,7 +13,7 @@ RUN echo -e '[include]\nfiles = /etc/supervisord.conf.d/*.ini\n[supervisord]\npi
 ###ssh config
 RUN mkdir /var/run/sshd
 #RUN ssh-keygen -A
-RUN for i in dsa rsa; do ssh-keygen -q -f /etc/ssh/ssh_host_${i}_key -N '' -t $i; done
+RUN for i in dsa rsa ecdsa ed25519; do ssh-keygen -q -f /etc/ssh/ssh_host_${i}_key -N '' -t $i; done
 RUN sed -i -r 's/.?UseDNS\syes/UseDNS no/' /etc/ssh/sshd_config && sed -i -r 's/.?ChallengeResponseAuthentication.+/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config && sed -i -r 's/.?PermitRootLogin.+/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\nstdout_logfile=/var/log/sshd.log\nstderr_logfile=/var/log/sshd.log\n' > /etc/supervisord.conf.d/sshd.ini
 
